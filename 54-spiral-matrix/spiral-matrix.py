@@ -12,9 +12,6 @@ class Solution:
                 spiral.append(matrix[u][i])
                 numElems += 1
             u += 1
-            
-            if numElems >= totalElems:
-                break
 
             # Go Down
             for i in range(u, d):
