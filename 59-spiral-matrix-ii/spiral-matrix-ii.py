@@ -1,9 +1,8 @@
 class Solution:
     def generateMatrix(self, n: int) -> List[List[int]]:
         matrix = [[0] * n for _ in range(n)]
-        ROWS, COLS = n, n
-        totalElems = ROWS * COLS
-        l, r, u, d = 0, COLS, 0, ROWS
+        totalElems = n * n
+        l, r, u, d = 0, n, 0, n
 
         numElems = 1
         while numElems <= totalElems:
