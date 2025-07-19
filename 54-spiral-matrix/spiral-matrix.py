@@ -27,9 +27,6 @@ class Solution:
                 spiral.append(matrix[d - 1][i])
                 numElems += 1
             d -= 1
-            
-            if numElems >= totalElems:
-                break
 
             # Go Up
             for i in range(d - 1, u - 1, -1):
