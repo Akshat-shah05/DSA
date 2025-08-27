@@ -7,22 +7,24 @@
 class Solution:
     def findClosestLeaf(self, root: Optional[TreeNode], k: int) -> int:
         graph = defaultdict(list)
+        q1 = deque([root])
         start = None
-        def dfs(node, parent = None):
-            nonlocal start
-            if not node:
-                return 
-            
+        while q1:
+            node = q1.popleft()
             if node.val == k:
                 start = node
+            
+            if node.left:
+                graph[node].append(node.left)
+                graph[node.left].append(node)
+                q1.append(node.left)
+            
+            if node.right:
+                graph[node].append(node.right)
+                graph[node.right].append(node)
+                q1.append(node.right)
 
-            if parent is not None:
-                graph[node].append(parent)
-                graph[parent].append(node)
-            dfs(node.left, node)
-            dfs(node.right, node)
-        
-        dfs(root)
+
         q = deque([start]) 
         visited = set([start])
         while q:
