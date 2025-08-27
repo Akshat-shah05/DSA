@@ -1,39 +1,45 @@
 class TicTacToe:
 
-    def __init__(self, n: int):
+    def __init__(self, n: int) -> None:
         self.n = n
         self.board = [[None] * n for _ in range(n)]
         self.directions = [(1, 0), (0, 1), (1, 1), (-1, 1)]
-        
+
     def move(self, row: int, col: int, player: int) -> int:
         if self.board[row][col] is not None:
-            raise ValueError("Cell already taken, try again")
+            raise ValueError("Cell already taken, try again!")
         
         self.board[row][col] = player
         return player if self._checkwin(row, col, player) else 0
 
     
-    def _checkwin(self, row, col, player):
+    def _checkwin(self, row: int, col: int, player: int) -> bool:
         for dr, dc in self.directions:
             count = 1
 
-            # move forwards
-            nr, nc = row + dr, col + dc
-            while 0 <= nr < self.n and 0 <= nc < self.n and self.board[nr][nc] == player:
+            # Moving in the forward direction
+            newRow, newCol = row + dr, col + dc
+            while self._validRC(newRow, newCol, player):
                 count += 1
-                nr += dr
-                nc += dc
+                newRow += dr
+                newCol += dc
             
-            nr, nc = row - dr, col - dc
-            while 0 <= nr < self.n and 0 <= nc < self.n and self.board[nr][nc] == player:
+            # Moving in the backwards direction
+            newRow, newCol = row - dr, col - dc
+            while self._validRC(newRow, newCol, player):
                 count += 1
-                nr -= dr
-                nc -= dc
+                newRow -= dr
+                newCol -= dc
             
             if count >= self.n:
                 return True
-            
+        
         return False
+    
+    def _validRC(self, row, col, player):
+        return 0 <= row < self.n and 0 <= col < self.n and self.board[row][col] == player
+            
+
         
 
 
