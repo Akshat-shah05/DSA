@@ -15,17 +15,17 @@ class TicTacToe:
     
     def _checkwin(self, row: int, col: int, player: int) -> bool:
         for dr, dc in self.directions:
-            count = 1
+            count = -1
 
             # Moving in the forward direction
-            newRow, newCol = row + dr, col + dc
+            newRow, newCol = row, col
             while self._validRC(newRow, newCol, player):
                 count += 1
                 newRow += dr
                 newCol += dc
             
             # Moving in the backwards direction
-            newRow, newCol = row - dr, col - dc
+            newRow, newCol = row, col
             while self._validRC(newRow, newCol, player):
                 count += 1
                 newRow -= dr
