@@ -6,44 +6,45 @@
 #         self.right = right
 class Solution:
     def getDirections(self, root: Optional[TreeNode], startValue: int, destValue: int) -> str:
-        parentMap = {}
         graph = defaultdict(list)
         start = None
 
         def dfs(node, parent = None):
             nonlocal start
-            if not node:
-                return 
-            if node.val == startValue:
-                start = node
-            
-            if parent:
-                parentMap[node] = parent
-                graph[parent].append(node)
-                graph[node].append(parent)
-            
-            dfs(node.left, node)
-            dfs(node.right, node)
-        
+            if node:
+                if parent:
+                    graph[node].append(parent)
+                    graph[parent].append(node)
+                
+                if node.val == startValue:
+                    start = node
+
+                dfs(node.left, node)
+                dfs(node.right, node)
+
         dfs(root)
-        
+
         q = deque([(start, "")])
-        seen = set([start])
+        visited = set([start])
         while q:
             node, path = q.popleft()
-
             if node.val == destValue:
                 return path
-
+            
             for nei in graph[node]:
-                if nei not in seen:
-                    seen.add(nei)
-                    if node in parentMap and parentMap[node] == nei:
-                        q.append((nei, path + "U"))
- 
-                    elif node.left == nei:
+                if nei not in visited:
+                    visited.add(nei)
+
+                    if nei == node.left:
                         q.append((nei, path + "L"))
                     
-                    elif node.right == nei:
+                    elif nei == node.right:
                         q.append((nei, path + "R"))
+                    
+                    else:
+                        q.append((nei, path + "U"))
         
+        return ""
+
+
+
