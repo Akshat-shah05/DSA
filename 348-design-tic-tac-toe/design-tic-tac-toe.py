@@ -22,6 +22,8 @@ class TicTacToe:
                 count += 1
                 newR += dr
                 newC += dc
+                if count >= self.n:
+                    return True
         
             # Reverse Direction
             newR, newC = row - dr, col - dc
@@ -29,6 +31,8 @@ class TicTacToe:
                 count += 1
                 newR -= dr
                 newC -= dc
+                if count >= self.n:
+                    return True
             
             if count >= self.n:
                 return True
