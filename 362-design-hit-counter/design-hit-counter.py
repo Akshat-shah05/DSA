@@ -1,28 +1,21 @@
-from collections import deque
-
 class HitCounter:
 
     def __init__(self):
-        self.hits = deque() # [timestamp, count]
         self.WINDOW = 300
+        self.hitsHistory = deque()
 
     def hit(self, timestamp: int) -> None:
-        if self.hits and self.hits[-1][0] == timestamp:
-            self.hits[-1][1] += 1
-        
-        else:
-            self.hits.append([timestamp, 1])
-        
+        self.hitsHistory.append(timestamp)
+        self._prune(timestamp)
+
     def getHits(self, timestamp: int) -> int:
-        minimumTimeAgo = timestamp - self.WINDOW
-        while self.hits and self.hits[0][0] <= minimumTimeAgo:
-            self.hits.popleft()
-        
-        totalHits = 0
-        for timestamp, count in self.hits:
-            totalHits += count
+        self._prune(timestamp)
+        return len(self.hitsHistory)
     
-        return totalHits
+    def _prune(self, timestamp):
+        while self.hitsHistory and self.hitsHistory[0] + self.WINDOW <= timestamp:
+            self.hitsHistory.popleft()
+        
 
 
 # Your HitCounter object will be instantiated and called as such:
