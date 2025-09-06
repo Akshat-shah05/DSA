@@ -15,12 +15,13 @@ class Solution:
                 if parent:
                     graph[root].append(parent)
                     graph[parent].append(root)
-
+                
                 if root.val == startValue:
                     start = root
+                
                 dfs(root.left, root)
                 dfs(root.right, root)
-        
+            
         dfs(root)
 
         q = deque([(start, "")])
@@ -28,6 +29,7 @@ class Solution:
 
         while q:
             node, path = q.popleft()
+
             if node.val == destValue:
                 return path
             
@@ -39,10 +41,8 @@ class Solution:
                     
                     elif nei == node.right:
                         q.append((nei, path + "R"))
-                    
+
                     else:
                         q.append((nei, path + "U"))
-                    
-                    
         
         return ""
