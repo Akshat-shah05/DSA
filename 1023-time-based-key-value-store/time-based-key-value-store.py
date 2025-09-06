@@ -4,33 +4,27 @@ class TimeMap:
         self.timeMap = defaultdict(list)
 
     def set(self, key: str, value: str, timestamp: int) -> None:
-        self.timeMap[key].append([value, timestamp])
-        
+        self.timeMap[key].append([timestamp, value])
+
     def get(self, key: str, timestamp: int) -> str:
         if key not in self.timeMap:
             return ""
-
-        values = self.timeMap[key]
-        if not values:
-            return ""
-
-        l = 0
-        r = len(self.timeMap[key]) - 1
+        
+        l, r = 0, len(self.timeMap[key]) - 1
+        toSearch = self.timeMap[key]
 
         while l <= r:
             mid = (l + r) // 2
-            ts = values[mid][1]
-
-            if ts == timestamp:
-                return values[mid][0]
-
-            elif ts < timestamp:
+            if toSearch[mid][0] < timestamp:
                 l = mid + 1
+            
+            elif toSearch[mid][0] == timestamp:
+                return toSearch[mid][1]
             
             else:
                 r = mid - 1
         
-        return values[r][0] if r >= 0 else ""
+        return toSearch[r][1] if r >= 0 else ""
         
 
 
