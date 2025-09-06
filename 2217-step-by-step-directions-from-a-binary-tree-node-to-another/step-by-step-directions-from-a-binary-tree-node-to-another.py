@@ -9,23 +9,23 @@ class Solution:
         graph = defaultdict(list)
         start = None
 
-        def dfs(node, parent = None):
+        def dfs(root, parent=None):
             nonlocal start
-            if node:
+            if root:
                 if parent:
-                    graph[node].append(parent)
-                    graph[parent].append(node)
-                
-                if node.val == startValue:
-                    start = node
+                    graph[root].append(parent)
+                    graph[parent].append(root)
 
-                dfs(node.left, node)
-                dfs(node.right, node)
-
+                if root.val == startValue:
+                    start = root
+                dfs(root.left, root)
+                dfs(root.right, root)
+        
         dfs(root)
 
         q = deque([(start, "")])
         visited = set([start])
+
         while q:
             node, path = q.popleft()
             if node.val == destValue:
@@ -34,7 +34,6 @@ class Solution:
             for nei in graph[node]:
                 if nei not in visited:
                     visited.add(nei)
-
                     if nei == node.left:
                         q.append((nei, path + "L"))
                     
@@ -43,8 +42,7 @@ class Solution:
                     
                     else:
                         q.append((nei, path + "U"))
+                    
+                    
         
         return ""
-
-
-
