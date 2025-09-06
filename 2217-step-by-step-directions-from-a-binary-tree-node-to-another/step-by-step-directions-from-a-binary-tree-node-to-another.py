@@ -6,43 +6,40 @@
 #         self.right = right
 class Solution:
     def getDirections(self, root: Optional[TreeNode], startValue: int, destValue: int) -> str:
-        graph = defaultdict(list)
-        start = None
-
-        def dfs(root, parent=None):
-            nonlocal start
-            if root:
-                if parent:
-                    graph[root].append(parent)
-                    graph[parent].append(root)
-                
-                if root.val == startValue:
-                    start = root
-                
-                dfs(root.left, root)
-                dfs(root.right, root)
-            
-        dfs(root)
-
-        q = deque([(start, "")])
-        visited = set([start])
-
-        while q:
-            node, path = q.popleft()
-
-            if node.val == destValue:
-                return path
-            
-            for nei in graph[node]:
-                if nei not in visited:
-                    visited.add(nei)
-                    if nei == node.left:
-                        q.append((nei, path + "L"))
-                    
-                    elif nei == node.right:
-                        q.append((nei, path + "R"))
-
-                    else:
-                        q.append((nei, path + "U"))
+        pathToStart = []
+        pathToEnd = []
         
-        return ""
+        def path_finder(root, target):
+            path = []
+            def dfs(root, target):
+                nonlocal path
+                if not root:
+                    return False
+                if root.val == target:
+                    return True
+                
+                path.append("L")
+                if dfs(root.left, target):
+                    return True
+                
+                path.pop()
+                path.append("R")
+                if dfs(root.right, target):
+                    return True
+                
+                path.pop()
+                return False
+            
+            return ''.join(path) if dfs(root, target) else None
+                
+        pathToStart = path_finder(root, startValue)
+        pathToEnd = path_finder(root, destValue)
+        
+        i = 0
+        while i < len(pathToStart) and i < len(pathToEnd) and pathToStart[i] == pathToEnd[i]:
+            i += 1
+        
+        return ("U" * (len(pathToStart) - i)) + pathToEnd[i:]
+
+                
+        
