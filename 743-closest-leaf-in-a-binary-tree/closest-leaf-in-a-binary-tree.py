@@ -9,34 +9,34 @@ class Solution:
         graph = defaultdict(list)
         start = None
 
-        def dfs(node, parent = None):
+        def dfs(root, parent=None):
             nonlocal start
-            if not node:
-                return 
-            
-            if node.val == k:
-                start = node
-            
-            graph[node].append(parent)
-            graph[parent].append(node)
-            dfs(node.left, node)
-            dfs(node.right, node)
+            if root:
+                if parent:
+                    graph[root].append(parent)
+                    graph[parent].append(root)
+                
+                if root.val == k:
+                    start = root
+                
+                dfs(root.left, root)
+                dfs(root.right, root)
         
         dfs(root)
-        
-        q2 = deque([start])
-        seen = set()
-        while q2:
-            node = q2.popleft()
+
+        q = deque([start])
+        visited = set([start])
+
+        while q:
+            node = q.popleft()
             if node:
-                if not node.left and not node.right:
+                if not node.right and not node.left:
                     return node.val
-                
+            
                 for nei in graph[node]:
-                    if nei not in seen:
-                        seen.add(nei)
-                        q2.append(nei)
-                        
-            for nei in graph[node]:
-                if nei not in seen:
-                    q2.append(nei)
+                    if nei not in visited:
+                        if not nei.right and not nei.left:
+                            return nei.val
+                        visited.add(nei)
+                        q.append(nei)
+            
