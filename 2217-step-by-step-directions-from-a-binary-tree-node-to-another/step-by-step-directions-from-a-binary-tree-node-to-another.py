@@ -6,36 +6,37 @@
 #         self.right = right
 class Solution:
     def getDirections(self, root: Optional[TreeNode], startValue: int, destValue: int) -> str:
-        pts = []
-        pte = []
+        pts = ''.join(self.path(root, startValue))
+        ptd = ''.join(self.path(root, destValue))
 
-        def path(root, target):
-            path = []
-            def dfs(root):
-                if not root:
-                    return False
-                
-                if root.val == target:
-                    return True
-                
-                path.append("L")
-                if dfs(root.left):
-                    return True
-                
-                path.pop()
-                path.append("R")
-                if dfs(root.right):
-                    return True
-                
-                path.pop()
-                return False
-            
-            return ''.join(path) if dfs(root) else ''
-        
-        pts = path(root, startValue)
-        pte = path(root, destValue)
         i = 0
-        while i < len(pts) and i < len(pte) and pte[i] == pts[i]:
+        while i < len(pts) and i < len(ptd) and pts[i] == ptd[i]:
             i += 1
         
-        return ("U" * (len(pts) - i)) + pte[i:]
+        return ("U" * (len(pts) - i)) + ptd[i:]
+
+    def path(self, root, target):
+        path = []
+        def dfs(root):
+            nonlocal path
+            if not root:
+                return False
+            
+            if root.val == target:
+                return True
+            
+            path.append("L")
+            if dfs(root.left):
+                return True
+            
+            path.pop()
+            path.append("R")
+            if dfs(root.right):
+                return True
+            
+            path.pop()
+            return False
+
+        dfs(root)
+        return path
+        
