@@ -1,22 +1,9 @@
 class Solution:
     def minSum(self, nums1: List[int], nums2: List[int]) -> int:
-        nums1sum = 0
-        nums2sum = 0
-        for num in nums1:
-            if num == 0:
-                nums1sum += 1
-            
-            nums1sum += num
-        
-        for num in nums2:
-            if num == 0:
-                nums2sum += 1
-            
-            nums2sum += num
-        
+        nums1sum, nums2sum = self.modifiedSum(nums1), self.modifiedSum(nums2)
         if nums1sum == nums2sum:
             return nums1sum
-        
+
         if nums1sum > nums2sum:
             if nums2.count(0) == 0:
                 return -1
@@ -28,3 +15,11 @@ class Solution:
                 return -1
             
             return nums2sum
+    
+    def modifiedSum(self, nums):
+        ans = 0
+        for num in nums:
+            ans += num if num != 0 else 1
+        
+        return ans
+            
