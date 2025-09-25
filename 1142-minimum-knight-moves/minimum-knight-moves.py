@@ -1,24 +1,18 @@
 class Solution:
     def minKnightMoves(self, x: int, y: int) -> int:
-        offsets = [(1, 2), (2, 1), (2, -1), (1, -2),
-                   (-1, -2), (-2, -1), (-2, 1), (-1, 2)]
+        offsets = [(1, 2), (1, -2), (2, 1), (2, -1), (-1, 2), (-1, -2), (-2, 1), (-2, -1)]
 
-        def bfs(x, y):
-            visited = set()
-            q = deque([(0, 0, 0)])
+        visited = set([(0, 0)])
+        q = deque([(0, 0, 0)])
 
-            while q:
-                curr_level_count = len(q)
-
-                curr_x, curr_y, steps = q.popleft()
-                if (curr_x, curr_y) == (x, y):
-                    return steps
-                
-                for offset_x, offset_y in offsets:
-                    next_x, next_y = curr_x + offset_x, curr_y + offset_y
-                    if (next_x, next_y) not in visited:
-                        visited.add((next_x, next_y))
-                        q.append((next_x, next_y, steps + 1))
-                
+        while q:
+            currX, currY, steps = q.popleft()
+            if (currX, currY) == (x, y):
+                return steps
+            
+            for dx, dy in offsets:
+                newX, newY = currX + dx, currY + dy
+                if (newX, newY) not in visited:
+                    visited.add((newX, newY))
+                    q.append((newX, newY, steps + 1))
         
-        return bfs(x, y)
