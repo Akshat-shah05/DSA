@@ -5,10 +5,12 @@ class Solution:
         for num in nums:
             points[num] += num
             
-        dp = [0] * (maxVal + 1)
-        dp[1] = points[1]
+        prev2 = 0
+        prev1 = points[1]
+        curr = prev1
 
         for i in range(2, maxVal + 1):
-            dp[i] = max(dp[i - 1], dp[i - 2] + points[i])
+            curr = max(prev1, prev2 + points[i])
+            prev2, prev1 = prev1, curr
         
-        return dp[-1]
+        return prev1
