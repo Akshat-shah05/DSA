@@ -7,28 +7,30 @@ class Solution:
             adjList[A].append((B, values[i]))
             adjList[B].append((A, 1/values[i]))
         
-        def dfs(start, end, result, visited):
+        def bfs(start, end):
             if start not in adjList or end not in adjList:
                 return -1.0
-            
-            if start == end:
-                return result
-            
-            visited.add(start)
 
-            for nei, weight in adjList[start]:
-                if nei in visited:
-                    continue
+            visited = set([(start)])
+            q = deque([(start, 1)])
+        
+            while q:
+                node, res = q.popleft()
+                if node == end:
+                    return res
                 
-                ans = dfs(nei, end, result * weight, visited)
-                if ans != -1.0:
-                    return ans
+                visited.add(node)
+                for nei, weight in adjList[node]:
+                    if nei in visited:
+                        continue
+                    
+                    q.append((nei, res * weight))
             
             return -1.0
         
         ans = []
 
         for C, D in queries:
-            ans.append(dfs(C, D, 1, set()))
+            ans.append(bfs(C, D))
         
         return ans
