@@ -1,20 +1,18 @@
 class Solution:
     def longestStrChain(self, words: List[str]) -> int:
         words.sort(key=len)
-        dp = {}
-        longestSequence = 1
 
+        dp = defaultdict(int)
+        ans = 1
         for word in words:
-            currLen = 1
-
+            curr = 1
             for i in range(len(word)):
-                predecessor = word[0:i] + word[i + 1:len(word) + 1]
-
-                if predecessor in dp:
-                    prevLength = dp[predecessor]
-                    currLen = max(currLen, prevLength + 1)
-                
-            dp[word] = currLen
-            longestSequence = max(longestSequence, currLen)
+                pred = word[:i] + word[i + 1:]
+                if pred in dp:
+                    curr = max(curr, dp[pred] + 1)
+            
+            dp[word] = curr
+            ans = max(ans, curr)
+    
+        return ans
         
-        return longestSequence
