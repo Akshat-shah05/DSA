@@ -1,16 +1,16 @@
 class Solution:
     def deleteAndEarn(self, nums: List[int]) -> int:
         points = defaultdict(int)
-        maxVal = max(nums)
+        maxVal = 0
         for num in nums:
             points[num] += num
-            
-        prev2 = 0
-        prev1 = points[1]
-        curr = prev1
+            maxVal = max(num, maxVal)
+        
+        dp = [0] * (maxVal + 1)
+        dp[0] = points[0]
+        dp[1] = points[1]
 
         for i in range(2, maxVal + 1):
-            curr = max(prev1, prev2 + points[i])
-            prev2, prev1 = prev1, curr
+            dp[i] = max(dp[i - 2] + points[i], dp[i - 1])
         
-        return prev1
+        return dp[-1]
