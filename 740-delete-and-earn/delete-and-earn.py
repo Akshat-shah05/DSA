@@ -6,11 +6,11 @@ class Solution:
             points[num] += num
             maxVal = max(num, maxVal)
         
-        dp = [0] * (maxVal + 1)
-        dp[0] = points[0]
-        dp[1] = points[1]
+        prev2, prev1 = points[0], points[1]
+        curr = 0
 
         for i in range(2, maxVal + 1):
-            dp[i] = max(dp[i - 2] + points[i], dp[i - 1])
+            curr = max(prev2 + points[i], prev1)
+            prev2, prev1 = prev1, curr
         
-        return dp[-1]
+        return prev1
