@@ -1,32 +1,23 @@
 class Solution:
     def maxNonDecreasingLength(self, nums1: List[int], nums2: List[int]) -> int:
-        # we let dp[i][0] be the longest substring ending at index i given you choose nums1[i]
-        # we let dp[i][1] be the longest substring ending at index i given you choose nums2[i]
+        # check if nums1[i] >= nums1[i - 1] and nums1[i] >= nums2[i - 1]
+        # check if nums2[i] >= nums2[i - 1] and nums2[i] >= nums1[i - 1]
 
-        # nums1[i] >= nums1[i - 1], dp[i][0] could be dp[i - 1][0] + 1
-        # nums1[i] >= nums2[i - 1], dp[i][0] could be dp[i - 1][1] + 1
-        # We let dp[i][0] = max(dp[i - 1][0] + 1, dp[i - 1][1] + 1)
+        # dp[i][0] --> would represent longest nondecreasing subarray, given you choose nums1[i]
+        # dp[i][1] --> would represent longest nondecreasing subarray, given you choose nums2[i]
 
-        # nums2[i] >= nums2[i - 1], dp[i][1] could be dp[i - 1][1] + 1
-        # nums2[i] >= nums1[i - 1], dp[i][1] could be dp[i - 1][0] + 1
-        # We let dp[i][1] = max(dp[i - 1][0] + 1, dp[i - 1][1] + 1)
-
-        n = len(nums1)
-        dp = [[1, 1] for _ in range(n)]
+        dp = [[1, 1] for _ in range(len(nums1))]
         ans = 1
 
-        for i in range(1, n):
+        for i in range(1, len(nums1)):
             if nums1[i] >= nums1[i - 1]:
                 dp[i][0] = dp[i - 1][0] + 1
-            
             if nums1[i] >= nums2[i - 1]:
                 dp[i][0] = max(dp[i][0], dp[i - 1][1] + 1)
-            
             if nums2[i] >= nums2[i - 1]:
                 dp[i][1] = dp[i - 1][1] + 1
-            
             if nums2[i] >= nums1[i - 1]:
-                dp[i][1] = max(dp[i][1], dp[i - 1][0] + 1)
+                dp[i][1] = max(dp[i - 1][0] + 1, dp[i][1])
             
             ans = max(ans, dp[i][0], dp[i][1])
         
