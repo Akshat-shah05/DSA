@@ -1,13 +1,14 @@
 class Solution:
     def longestPalindrome(self, s: str) -> str:
         n = len(s)
-        dp = [[False] * n for _ in range(n)]
-
+        if n == 0:
+            return ""
+        
+        dp = [[None] * n for _ in range(n)]
         ans = [0, 0]
 
         for i in range(n):
             dp[i][i] = True
-            ans = [i, i]
         
         for i in range(n - 1):
             dp[i][i + 1] = True if s[i] == s[i + 1] else False
@@ -15,7 +16,7 @@ class Solution:
         
         for sLen in range(3, n + 1):
             i = 0
-            for j in range(i + sLen - 1, n):
+            for j in range(sLen + i - 1, n):
                 dp[i][j] = dp[i + 1][j - 1] and s[i] == s[j]
                 if dp[i][j]:
                     ans = [i, j]
@@ -24,3 +25,6 @@ class Solution:
         
         i, j = ans
         return s[i : j + 1]
+        
+
+
