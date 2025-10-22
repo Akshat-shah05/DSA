@@ -13,21 +13,19 @@ class MyCircularQueue:
         if self.isFull():
             return False
         
-        with self._lock:
-            insertIdx = (self.headIdx + self.count) % self.capacity
-            self.q[insertIdx] = value
-            self.count += 1
-            return True
+        insertIdx = (self.headIdx + self.count) % self.capacity
+        self.q[insertIdx] = value
+        self.count += 1
+        return True
 
     def deQueue(self) -> bool:
         if self.isEmpty():
             return False
         
-        with self._lock:
-            newHeadIdx = (self.headIdx + 1) % self.capacity
-            self.headIdx = newHeadIdx
-            self.count -= 1
-            return True
+        newHeadIdx = (self.headIdx + 1) % self.capacity
+        self.headIdx = newHeadIdx
+        self.count -= 1
+        return True
         
     def Front(self) -> int:
         if self.isEmpty():
