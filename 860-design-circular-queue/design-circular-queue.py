@@ -1,5 +1,3 @@
-import threading
-
 class MyCircularQueue:
 
     def __init__(self, k: int):
@@ -7,14 +5,13 @@ class MyCircularQueue:
         self.count = 0
         self.capacity = k
         self.headIdx = 0
-        self._lock = threading.Lock()
 
     def enQueue(self, value: int) -> bool:
         if self.isFull():
             return False
         
-        insertIdx = (self.headIdx + self.count) % self.capacity
-        self.q[insertIdx] = value
+        idxToAdd = (self.headIdx + self.count) % self.capacity
+        self.q[idxToAdd] = value
         self.count += 1
         return True
 
@@ -22,23 +19,21 @@ class MyCircularQueue:
         if self.isEmpty():
             return False
         
-        newHeadIdx = (self.headIdx + 1) % self.capacity
-        self.headIdx = newHeadIdx
+        self.headIdx = (self.headIdx + 1) % self.capacity
         self.count -= 1
         return True
         
     def Front(self) -> int:
         if self.isEmpty():
             return -1
-
+        
         return self.q[self.headIdx]
-
+        
     def Rear(self) -> int:
         if self.isEmpty():
             return -1
-
-        rearIdx = (self.headIdx + self.count - 1) % self.capacity
-        return self.q[rearIdx]
+        
+        return self.q[(self.headIdx + self.count - 1) % self.capacity]
 
     def isEmpty(self) -> bool:
         return self.count == 0
