@@ -1,3 +1,5 @@
+from random import choice 
+
 class RandomizedSet:
 
     def __init__(self):
@@ -10,26 +12,25 @@ class RandomizedSet:
             return False
         
         self.rs[val] = self.length
-        self.length += 1
         self.list.append(val)
+        self.length += 1
         return True
         
     def remove(self, val: int) -> bool:
         if val not in self.rs:
             return False
-
+        
         idx = self.rs[val]
-        last = self.list[-1]
-        self.list[idx] = last
-        self.rs[last] = idx
-        self.list.pop()
+        lastVal = self.list[-1]
+        self.list[idx], self.list[-1] = self.list[-1], self.list[idx]
+        self.rs[lastVal] = idx
         del self.rs[val]
+        self.list.pop()
         self.length -= 1
         return True
-        
+
     def getRandom(self) -> int:
         return choice(self.list)
-        
 
 
 # Your RandomizedSet object will be instantiated and called as such:
