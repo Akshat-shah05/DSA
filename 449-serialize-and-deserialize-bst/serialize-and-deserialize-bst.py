@@ -18,6 +18,7 @@ class Codec:
             postorder(node.left)
             postorder(node.right)
             vals.append(str(node.val))
+
         postorder(root)
         return ",".join(vals)
 
