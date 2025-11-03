@@ -1,20 +1,27 @@
 class Solution:
     def countSubstrings(self, s: str) -> int:
+        if not s:
+            return 0
+        
         n = len(s)
-        i = 0
-        ans = 0
-        while i < n:
-            ans += self.loop(i, i, n, s)
-            ans += self.loop(i, i + 1, n, s)
-            i += 1
+        total = 0
+        dp = [[False] * n for _ in range(n)]    
+        for i in range(n):
+            dp[i][i] = True
+            total += 1
         
-        return ans
+        for i in range(n - 1):
+            dp[i][i + 1] = True if s[i] == s[i + 1] else False
+            if dp[i][i + 1]:
+                total += 1
+        
+        for sLen in range(3, n + 1):
+            i = 0
+            for j in range(i + sLen - 1, n):
+                dp[i][j] = dp[i + 1][j - 1] and s[i] == s[j]
+                if dp[i][j]:
+                    total += 1
+                
+                i += 1
     
-    def loop(self, l, r, n, s):
-        ans = 0
-        while l >= 0 and r < n and s[l] == s[r]:
-            ans += 1
-            l -= 1
-            r += 1
-        
-        return ans
+        return total
