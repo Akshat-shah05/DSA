@@ -1,39 +1,63 @@
-class FrontMiddleBackQueue(object):
+class FrontMiddleBackQueue:
 
     def __init__(self):
-        self.A, self.B = collections.deque(), collections.deque()
+        self.lQ, self.rQ = deque(), deque()
+    
+    def _rebalance(self):
+        while len(self.rQ) > len(self.lQ):
+            self.lQ.append(self.rQ.popleft())
+        while len(self.lQ) > len(self.rQ) + 1:
+            self.rQ.appendleft(self.lQ.pop())
 
-    def pushFront(self, val):
-        self.A.appendleft(val)
-        self.balance()
+    def pushFront(self, val: int) -> None:
+        self.lQ.appendleft(val)
+        self._rebalance()
 
-    def pushMiddle(self, val):
-        if len(self.A) > len(self.B):
-            self.B.appendleft(self.A.pop())
-        self.A.append(val)
-
-    def pushBack(self, val):
-        self.B.append(val)
-        self.balance()
-
-    def popFront(self):
-        val = self.A.popleft() if self.A else -1
-        self.balance()
+    def pushMiddle(self, val: int) -> None:
+        if len(self.lQ) > len(self.rQ):
+            self.rQ.appendleft(self.lQ.pop())
+        self.lQ.append(val)
+        
+    def pushBack(self, val: int) -> None:
+        self.rQ.append(val)
+        self._rebalance()
+        
+    def popFront(self) -> int:
+        if len(self.lQ) == 0:
+            return -1
+        
+        val = self.lQ.popleft()
+        self._rebalance()
         return val
-
-    def popMiddle(self):
-        val = (self.A or [-1]).pop()
-        self.balance()
+        
+    def popMiddle(self) -> int:
+        if len(self.lQ) == 0:
+            return -1
+        
+        val = self.lQ.pop()
+        self._rebalance()
         return val
+        
+    def popBack(self) -> int:
+        if len(self.rQ) == 0:
+            if len(self.lQ) == 0:
+                return -1
+            
+            val = self.lQ.pop()
+            self._rebalance()
+            return val
+        else:
+            val = self.rQ.pop()
+            self._rebalance()
+            return val
 
-    def popBack(self):
-        val = (self.B or self.A or [-1]).pop()
-        self.balance()
-        return val
 
-    # keep A.size() >= B.size()
-    def balance(self):
-        if len(self.A) > len(self.B) + 1:
-            self.B.appendleft(self.A.pop())
-        if len(self.A) < len(self.B):
-            self.A.append(self.B.popleft())
+
+# Your FrontMiddleBackQueue object will be instantiated and called as such:
+# obj = FrontMiddleBackQueue()
+# obj.pushFront(val)
+# obj.pushMiddle(val)
+# obj.pushBack(val)
+# param_4 = obj.popFront()
+# param_5 = obj.popMiddle()
+# param_6 = obj.popBack()
