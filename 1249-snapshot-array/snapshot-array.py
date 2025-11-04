@@ -5,8 +5,10 @@ class SnapshotArray:
         self.id = 0
 
     def set(self, index: int, val: int) -> None:
-        self.snapArr[index].append([self.id, val])
-
+        if self.snapArr[index][-1][0] == self.id:
+            self.snapArr[index][-1] = [self.id, val]
+        else:
+            self.snapArr[index].append([self.id, val])
 
     def snap(self) -> int:
         self.id += 1
