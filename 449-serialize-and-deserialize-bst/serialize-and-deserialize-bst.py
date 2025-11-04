@@ -13,7 +13,8 @@ class Codec:
         vals = []
         def postorder(node):
             if not node:
-                return
+                vals.append("#")
+                return None
             
             postorder(node.left)
             postorder(node.right)
@@ -25,26 +26,22 @@ class Codec:
     def deserialize(self, data: str) -> Optional[TreeNode]:
         """Decodes your encoded data to tree.
         """
-        if not data:
-            return []
-
-        vals = list(map(int, data.split(",")))
-
-        def build(low, high):
+        vals = data.split(",")
+        def build():
             if not vals:
                 return None
             
-            if not low < vals[-1] < high:
+            v = vals.pop()
+            if v == "#":
                 return None
             
-            v = vals.pop()
-            node = TreeNode(v)
-            node.right = build(v, high)
-            node.left = build(low, v)
+            node = TreeNode(int(v))
+            node.right = build()
+            node.left = build()
             return node
         
-        return build(float('-inf'), float('inf'))
-        
+        return build()
+
 
 # Your Codec object will be instantiated and called as such:
 # Your Codec object will be instantiated and called as such:
