@@ -2,20 +2,21 @@ class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
         adjList = defaultdict(list)
         indegrees = [0] * numCourses
-        for a, b in prerequisites:
-            adjList[b].append(a)
-            indegrees[a] += 1
+        for A, B in prerequisites:
+            adjList[B].append(A)
+            indegrees[A] += 1
         
-        q = deque([course for course in range(numCourses) if indegrees[course] == 0])
-        processed_nodes = 0
+        q = deque([x for x in range(numCourses) if indegrees[x] == 0])
+        processed = 0
 
         while q:
-            curNode = q.popleft()
-            processed_nodes += 1
+            node = q.popleft()
+            processed += 1
 
-            for node in adjList[curNode]:
-                indegrees[node] -= 1
-                if indegrees[node] == 0:
-                    q.append(node)
+            for nei in adjList[node]:
+                indegrees[nei] -= 1
+                if indegrees[nei] == 0:
+                    q.append(nei)
         
-        return processed_nodes == numCourses
+        return processed == numCourses
+
