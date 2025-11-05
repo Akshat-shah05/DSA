@@ -1,60 +1,84 @@
-from typing import List
-
 class FileNode:
     def __init__(self):
-        self.childDirectories = {}
+        self.directories = {}
         self.files = {}
 
 class FileSystem:
 
     def __init__(self):
-        self.fs = FileNode()
-        self.fs.childDirectories["/"] = FileNode()
-
-    def _root(self) -> FileNode:
-        return self.fs.childDirectories["/"]
-
-    def _parts(self, path: str) -> List[str]:
-        return [p for p in path.split("/") if p]
-
+        self.root = FileNode()
+        self.root.directories["/"] = FileNode()
+        
     def ls(self, path: str) -> List[str]:
-        node = self._root()
+        root = self.root.directories["/"]
+        parts = path.split("/")
+
         if path == "/":
-            return sorted(list(node.childDirectories.keys()) + list(node.files.keys()))
+            return sorted(list(root.directories.keys()) + list(root.files.keys()))
 
-        parts = self._parts(path)
+        for part in parts[:-1]:
+            if part == "":
+                continue
 
-        for i, name in enumerate(parts):
-            is_last = (i == len(parts) - 1)
-            if is_last and name in node.files:
-                return [name]
-            if name not in node.childDirectories:
+            if part not in root.directories:
                 return []
-            node = node.childDirectories[name]
-
-        return sorted(list(node.childDirectories.keys()) + list(node.files.keys()))
+            
+            root = root.directories[part]
+        
+        last = parts[-1]
+        if last in root.files:
+            return [last]
+        
+        if last not in root.directories:
+            return []
+        
+        root = root.directories[last]
+        return sorted(list(root.directories.keys()) + list(root.files.keys()))
 
     def mkdir(self, path: str) -> None:
-        node = self._root()
-        for name in self._parts(path):
-            if name not in node.childDirectories:
-                node.childDirectories[name] = FileNode()
-            node = node.childDirectories[name]
+        root = self.root.directories["/"]
+        parts = path.split("/")
+
+        for part in parts:
+            if part == "":
+                continue
+            if part not in root.directories:
+                root.directories[part] = FileNode()
+            
+            root = root.directories[part]
 
     def addContentToFile(self, filePath: str, content: str) -> None:
-        node = self._root()
-        parts = self._parts(filePath)
-        for name in parts[:-1]:
-            if name not in node.childDirectories:
-                node.childDirectories[name] = FileNode()
-            node = node.childDirectories[name]
-        fname = parts[-1]
-        node.files[fname] = node.files.get(fname, "") + content
+        root = self.root.directories["/"]
+        parts = filePath.split("/")
+
+        for part in parts[:-1]:
+            if part == "":
+                continue
+            if part not in root.directories:
+                root.directories[part] = FileNode()
+            
+            root = root.directories[part]
+
+        root.files[parts[-1]] = root.files.get(parts[-1], "") + content
 
     def readContentFromFile(self, filePath: str) -> str:
-        node = self._root()
-        parts = self._parts(filePath)
-        for name in parts[:-1]:
-            node = node.childDirectories[name]
-        fname = parts[-1]
-        return node.files[fname]
+        root = self.root.directories["/"]
+        parts = filePath.split("/")
+
+        for part in parts[:-1]:
+            if part == "":
+                continue
+            if part not in root.directories:
+                return ""
+            
+            root = root.directories[part]
+        
+        return root.files[parts[-1]]
+        
+
+# Your FileSystem object will be instantiated and called as such:
+# obj = FileSystem()
+# param_1 = obj.ls(path)
+# obj.mkdir(path)
+# obj.addContentToFile(filePath,content)
+# param_4 = obj.readContentFromFile(filePath)
