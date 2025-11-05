@@ -1,5 +1,3 @@
-from collections import defaultdict, OrderedDict
-
 class LFUCache:
 
     def __init__(self, capacity: int):
@@ -13,23 +11,19 @@ class LFUCache:
         if key not in self.key2val:
             return -1
         
-        oldfreq = self.key2freq[key]
-        self.key2freq[key] = oldfreq + 1
-        self.freq2key[oldfreq].pop(key)
-        if not self.freq2key[oldfreq]:
-            del self.freq2key[oldfreq]
+        oldFreq = self.key2freq[key]
+        self.key2freq[key] = oldFreq + 1
+        self.freq2key[oldFreq].pop(key)
+        if not self.freq2key[oldFreq]:
+            del self.freq2key[oldFreq]
         
-        self.freq2key[oldfreq + 1][key] = 1
-        if self.minf not in self.freq2key:
+        self.freq2key[oldFreq + 1][key] = 1
+        while self.minf not in self.freq2key:
             self.minf += 1
         
         return self.key2val[key]
-        
 
     def put(self, key: int, value: int) -> None:
-        if self.cap <= 0:
-            return 
-        
         if key in self.key2val:
             self.get(key)
             self.key2val[key] = value
@@ -42,8 +36,8 @@ class LFUCache:
         
         self.key2val[key] = value
         self.key2freq[key] = 1
-        self.freq2key[1][key] = 1
         self.minf = 1
+        self.freq2key[self.minf][key] = 1
 
 
 # Your LFUCache object will be instantiated and called as such:
