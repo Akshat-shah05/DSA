@@ -1,44 +1,31 @@
 class Spreadsheet:
 
     def __init__(self, rows: int):
-        self.grid = [[0] * 26 for _ in range(rows)]
+        self.cells = {}
 
     def setCell(self, cell: str, value: int) -> None:
-        column = cell[0]
-        row = int(cell[1:])
-
-        self.grid[row - 1][ord(column) - ord("A")] = value
+        self.cells[cell] = value
         
     def resetCell(self, cell: str) -> None:
-        column = cell[0]
-        row = int(cell[1:])
-
-        self.grid[row - 1][ord(column) - ord("A")] = 0
-
+        if cell in self.cells:
+            del self.cells[cell]
+        
     def getValue(self, formula: str) -> int:
-        elem1, elem2 = formula[1:].split("+")
-        elem1val, elem2val = 0, 0
-        
-        if elem1[0].isalpha():
-            column = elem1[0]
-            row = int(elem1[1:])
-
-            elem1val = self.grid[row - 1][ord(column) - ord("A")]
-        
+        part1, part2 = formula[1:].split('+')
+        if part1 in self.cells:
+            part1 = self.cells[part1]
+        elif part1[0].isalpha():
+            part1 = 0
         else:
-            elem1val = int(elem1)
-        
-        if elem2[0].isalpha():
-            column = elem2[0]
-            row = int(elem2[1:])
-
-            elem2val = self.grid[row - 1][ord(column) - ord("A")]
-        
+            part1 = int(part1)
+        if part2 in self.cells:
+            part2 = self.cells[part2]
+        elif part2[0].isalpha():
+            part2 = 0
         else:
-            elem2val = int(elem2)
-
-        return elem1val + elem2val
-
+            part2 = int(part2)
+        
+        return part1 + part2
         
 
 
