@@ -4,9 +4,7 @@ class Solution:
         parentList = defaultdict(int)
         indegrees = [0] * (n + 1)
         for prereq, postreq in relations:
-            prereqTime = parentList[prereq] if prereq in parentList else time[prereq - 1]
             adjList[prereq].append(postreq)
-            parentList[postreq] = max(parentList[postreq], prereqTime)
             indegrees[postreq] += 1
         
         maxTime = 0
