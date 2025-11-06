@@ -2,14 +2,12 @@ class Solution:
     def arrayRankTransform(self, arr: List[int]) -> List[int]:
         num2rank = {}
         arr2 = sorted(arr)
-        seen = set()
         rank = 1
 
-        for num in arr2:
-            if num not in seen:
-                seen.add(num)
-                num2rank[num] = rank
+        for i in range(len(arr2)):
+            if i > 0 and arr2[i] > arr2[i - 1]:
                 rank += 1
+            num2rank[arr2[i]] = rank
         
         ans = []
 
