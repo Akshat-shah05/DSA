@@ -1,23 +1,19 @@
 class Solution:
     def minKnightMoves(self, x: int, y: int) -> int:
-        directions = [(1, 2), (1, -2), (2, 1), (2, -1), (-1, 2), (-1, -2), (-2, 1), (-2, -1)]
-        visited = set([(0, 0)])
-        steps = 0
-        q = deque([(0, 0)])
+        cache = {}
 
-        while q:
-            for _ in range(len(q)):
-                curX, curY = q.popleft()
-                if (curX, curY) == (x, y):
-                    return steps
-                
-                for dx, dy in directions:
-                    newX, newY = curX + dx, curY + dy
-                    if (newX, newY) not in visited:
-                        visited.add((newX, newY))
-                        q.append((newX, newY))
-
+        def dfs(x, y):
+            if (x, y) in cache:
+                return cache[(x, y)]
+            if x + y == 0:
+                return 0
             
-            steps += 1
+            if x + y == 2:
+                return 2
+            
+            else:
+                ans = min(dfs(abs(x - 1), abs(y - 2)), dfs(abs(x - 2), abs(y - 1))) + 1
+                cache[(x, y)] = ans
+                return ans
         
-        return -1
+        return dfs(abs(x),abs(y))
