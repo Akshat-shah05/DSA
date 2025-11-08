@@ -1,20 +1,23 @@
 class Solution:
     def allPathsSourceTarget(self, graph: List[List[int]]) -> List[List[int]]:
-        n = len(graph)
-        q = deque([[0]])
-        target = n - 1
         res = []
+        n = len(graph)
+        target = n - 1
+        seen = set()
 
-        while q:
-            path = q.popleft()
-            mostRecentNode = path[-1]
+        def dfs(node, path):
+            if node == target:
+                res.append(path[:])
 
-            if mostRecentNode == target:
-                res.append(path)
-                continue
-            
-            for nei in graph[mostRecentNode]:
-                q.append(path + [nei])
+            for nei in graph[node]:
+                if nei in seen:
+                    continue
+                
+                seen.add(nei)
+                path.append(nei)
+                dfs(nei, path)
+                path.pop()
+                seen.remove(nei)
         
+        dfs(0, [0])
         return res
-
