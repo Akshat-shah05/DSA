@@ -4,7 +4,7 @@ class Solution:
         while columnNumber > 0:
             columnNumber -= 1
             mod = columnNumber % 26
-            ans.append(chr(mod + ord("A")))
+            ans.append(chr(mod + ord('A')))
             columnNumber //= 26
         
         return "".join(ans[::-1])
