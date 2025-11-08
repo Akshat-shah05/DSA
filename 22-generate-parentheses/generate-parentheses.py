@@ -7,15 +7,11 @@ class Solution:
                 ans.append(path)
                 return
             
-            if closedP > openP:
-                return 
-            
-            if openP == n:
+            if openP > closedP:
                 backtrack(openP, closedP + 1, path + ")")
             
-            else:
-                backtrack(openP + 1, closedP, path + "(")
-                backtrack(openP, closedP + 1, path + ")")
-            
+            if openP < n:
+                backtrack(openP + 1, closedP, path + "(" )
+
         backtrack(0, 0, "")
         return ans
