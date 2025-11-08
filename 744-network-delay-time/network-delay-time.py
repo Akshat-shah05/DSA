@@ -5,19 +5,20 @@ class Solution:
             adjList[u].append((v, weight))
         
         pq = [(0, k)] # Time and node
-        dist = [float('inf')] * (n + 1)
-        dist[k] = 0
+        visit = set()
+        t = 0
 
         while pq:
             time, node = heapq.heappop(pq)
-            if time > dist[node]:
+            if node in visit:
                 continue
+
+            t = max(t, time)
             
-            dist[node] = time
-            for nei, t in adjList[node]:
-                newTime = time + t
-                if newTime < dist[nei]:
+            visit.add(node)
+            for nei, t2 in adjList[node]:
+                if nei not in visit:
+                    newTime = time + t2
                     heapq.heappush(pq, (newTime, nei))
         
-        ans = max(dist[1:])
-        return ans if ans != float('inf') else -1
+        return t if len(visit) == n else -1
