@@ -14,10 +14,9 @@ class Codec:
         :rtype: str
         """
         vals = []
-
         def postorder(node):
             if not node:
-                vals.append("#")
+                vals.append("#") # represents a None Node 
                 return 
             
             postorder(node.left)
@@ -26,35 +25,28 @@ class Codec:
         
         postorder(root)
         return ",".join(vals)
-        
+
     def deserialize(self, data):
         """Decodes your encoded data to tree.
         
         :type data: str
         :rtype: TreeNode
         """
-        if not data:
-            return []
-    
         vals = data.split(",")
-
-        def build():
+        def rebuild():
             if not vals:
-                return
-                
+                return None
+            
             v = vals.pop()
             if v == "#":
                 return None
             
             node = TreeNode(int(v))
-            node.right = build()
-            node.left = build()
+            node.right = rebuild()
+            node.left = rebuild()
             return node
         
-        return build()
-
-
-        
+        return rebuild()
 
 # Your Codec object will be instantiated and called as such:
 # ser = Codec()
