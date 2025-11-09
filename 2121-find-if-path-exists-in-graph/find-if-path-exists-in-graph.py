@@ -5,25 +5,18 @@ class Solution:
             adjList[u].append(v)
             adjList[v].append(u)
         
-        if source == destination:
-            return True
-            
-        if source not in adjList or destination not in adjList:
-            return False
-        
         seen = set()
         
-        def dfs(source):
-            if source == destination:
+        def dfs(src, dst):
+            if src == dst:
                 return True
             
-            seen.add(source)
-            
+            seen.add(src)
             ans = False
-            for nei in adjList[source]:
+            for nei in adjList[src]:
                 if nei not in seen:
-                    ans = ans or dfs(nei)
+                    ans = ans or dfs(nei, dst)
             
             return ans
         
-        return dfs(source)
+        return dfs(source, destination)
