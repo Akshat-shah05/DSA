@@ -1,37 +1,35 @@
 class Solution:
     def longestPalindrome(self, s: str) -> str:
-        n = len(s)
-        if n == 0:
-            return ""
+        # every individual character is a palindrome
+        # every set of two of the same characters is a palindrome
+        # if dp[i][j] represents that s[i : j + 1] is a palindrome
+        # Then we know dp[i][j] = s[i] == s[j] && dp[i + 1][j - 1] is True
+
+        # Algorithm
+        #   First --> initialize dp array with individual and pairs
+        #   Iterate over all substring lengths (3 --> len(s)) --> loop till len(s) + 1
+        #   Update each dp[i][j] = s[i] == s[j] && dp[i + 1][j - 1]
+
+        dp = [[False] * (len(s) + 1) for _ in range(len(s) + 1)]
+        longest = [0, 0]
+
+        for i in range(len(s)):
+            dp[i][i] = True
         
-        max_start = 0
-        max_length = 1
-
-        for i in range(n):
-            l = r = i
-            while l >= 0 and r < n and s[l] == s[r]:
-                l -= 1
-                r += 1
-            
-            l += 1
-            r -= 1
-            
-            if (r - l + 1) > max_length:
-                max_length = (r - l + 1)
-                max_start = l
-
-            l = i
-            r = i + 1
-            while l >= 0 and r < n and s[l] == s[r]:
-                l -= 1
-                r += 1
-            
-            l += 1
-            r -= 1
-
-            if (r - l + 1) > max_length:
-                max_length = (r - l + 1)
-                max_start = l
+        for i in range(len(s) - 1):
+            dp[i][i + 1] = True if s[i] == s[i + 1] else False
+            if dp[i][i + 1]:
+                longest = [i, i + 1]
         
-        print(max_length)
-        return s[max_start : max_start + max_length]
+        for sLen in range(3, len(s) + 1):
+            i = 0
+            for j in range(i + sLen - 1, len(s)):
+                dp[i][j] = (dp[i + 1][j - 1] and s[i] == s[j])
+                if dp[i][j]:
+                    longest = [i, j]
+                
+                i += 1
+        
+        l, r = longest
+        return s[l : r + 1]
+
