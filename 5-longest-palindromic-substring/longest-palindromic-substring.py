@@ -10,7 +10,7 @@ class Solution:
         #   Iterate over all substring lengths (3 --> len(s)) --> loop till len(s) + 1
         #   Update each dp[i][j] = s[i] == s[j] && dp[i + 1][j - 1]
 
-        dp = [[False] * (len(s) + 1) for _ in range(len(s) + 1)]
+        dp = [[False] * (len(s)) for _ in range(len(s))]
         longest = [0, 0]
 
         for i in range(len(s)):
