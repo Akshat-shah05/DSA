@@ -8,17 +8,16 @@ class Solution:
     def maxPathSum(self, root: Optional[TreeNode]) -> int:
         maxPath = float('-inf')
 
-        def maxPathRecursive(node):
+        def dfs(node):
             nonlocal maxPath
-
             if not node:
                 return 0
             
-            gainFromLeft = max(maxPathRecursive(node.left), 0)
-            gainFromRight = max(maxPathRecursive(node.right), 0)
-
+            gainFromLeft = max(0, dfs(node.left))
+            gainFromRight = max(0, dfs(node.right))
             maxPath = max(maxPath, gainFromLeft + gainFromRight + node.val)
+
             return max(gainFromLeft, gainFromRight) + node.val
         
-        maxPathRecursive(root)
+        dfs(root)
         return maxPath
