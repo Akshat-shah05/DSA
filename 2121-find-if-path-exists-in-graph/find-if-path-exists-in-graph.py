@@ -12,11 +12,11 @@ class Solution:
                 return True
             
             seen.add(src)
-            ans = False
             for nei in adjList[src]:
                 if nei not in seen:
-                    ans = ans or dfs(nei, dst)
+                    if dfs(nei, dst):
+                        return True
             
-            return ans
+            return False
         
         return dfs(source, destination)
