@@ -2,10 +2,9 @@ class Solution:
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
         if not nums or k == 0:
             return []
-
-        q = deque()
+        
         ans = []
-
+        q = deque()
         for r in range(len(nums)):
             while q and nums[q[-1]] <= nums[r]:
                 q.pop()
