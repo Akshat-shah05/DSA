@@ -2,9 +2,10 @@ class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         hmap = defaultdict(int)
 
-        for i in range(len(nums)):
-            needed = target - nums[i]
+        for i, num in enumerate(nums):
+            needed = target - num
             if needed in hmap:
-                return [hmap[needed], i]
+                return [i, hmap[needed]]
             
-            hmap[nums[i]] = i
+            hmap[num] = i
+            
