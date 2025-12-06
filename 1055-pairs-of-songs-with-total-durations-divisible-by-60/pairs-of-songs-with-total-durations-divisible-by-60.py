@@ -1,15 +1,13 @@
 class Solution:
     def numPairsDivisibleBy60(self, time: List[int]) -> int:
         remainders = defaultdict(int)
-        ans = 0 
+        ans = 0
 
-        for t in time:
-            if t % 60 == 0:
-                ans += remainders[0]
+        for i in range(len(time)):
+            needed = (60 - time[i] % 60) % 60
+            if needed in remainders:
+                ans+=remainders[needed]
             
-            else:
-                ans += remainders[60 - t % 60]
-            
-            remainders[t % 60] += 1
+            remainders[time[i] % 60] += 1
     
         return ans
