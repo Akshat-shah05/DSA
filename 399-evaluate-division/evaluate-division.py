@@ -1,33 +1,32 @@
 class Solution:
     def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
         adjList = defaultdict(list)
-
         for eq, val in zip(equations, values):
-            A, B = eq
-            adjList[A].append((B, val))
-            adjList[B].append((A, 1/val))
+            a, b = eq
+            adjList[a].append((b, val))
+            adjList[b].append((a, 1/val))
         
-        def dfs(start, end, result, visited):
+        def bfs(start, end):
             if start not in adjList or end not in adjList:
-                return -1.0
+                return -1
+            q = deque([(start, 1)])
+            seen = set([(start)])
 
-            if start == end:
-                return result
-            
-            visited.add(start)
+            while q:
+                node, resSoFar = q.popleft()
 
-            for nei, val in adjList[start]:
-                if nei in visited:
-                    continue
+                if node == end:
+                    return resSoFar
                 
-                ans = dfs(nei, end, result * val, visited)
-                if ans != -1.0:
-                    return ans
+                for nei, mult in adjList[node]:
+                    if nei not in seen:
+                        seen.add(nei)
+                        q.append((nei, resSoFar * mult))
             
-            return -1.0
-
+            return -1
+        
         ans = []
-        for A, B in queries:
-            ans.append(dfs(A, B, 1, set()))
+        for c, d in queries:
+            ans.append(bfs(c, d))
 
         return ans
