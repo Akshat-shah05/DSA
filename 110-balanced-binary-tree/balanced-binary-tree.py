@@ -13,8 +13,10 @@ class Solution:
 
             leftBalanced, leftMax = balance(root.left)
             rightBalanced, rightMax = balance(root.right)
+            balanced = leftBalanced and rightBalanced and abs(leftMax - rightMax) <= 1
+            height = 1 + max(leftMax, rightMax)
 
-            return (leftBalanced and rightBalanced and abs(leftMax - rightMax) <= 1, 1 + max(leftMax, rightMax))
+            return (balanced, height)
         
         ans, _ = balance(root)
         return ans
