@@ -1,36 +1,40 @@
 class Solution:
     def generateMatrix(self, n: int) -> List[List[int]]:
         matrix = [[0] * n for _ in range(n)]
-        totalElems = n * n
-        l, r, u, d = 0, n, 0, n
+        counter = 1
+        l, r, t, b = 0, n, 0, n
 
-        numElems = 1
-        while numElems <= totalElems:
-            # Go right
+        while True:
             for i in range(l, r):
-                matrix[u][i] = numElems
-                numElems += 1
-            u += 1
-
-            # Go Down
-            for i in range(u, d):
-                matrix[i][r - 1] = numElems
-                numElems += 1
-            r -= 1
+                matrix[t][i] = counter
+                counter += 1
             
-            if numElems > totalElems:
+            t += 1
+            if t == b:
                 break
-
-            # Go Left
+            
+            for i in range(t, b):
+                matrix[i][r - 1] = counter
+                counter += 1
+            
+            r -= 1
+            if r == l:
+                break
+            
             for i in range(r - 1, l - 1, -1):
-                matrix[d - 1][i] = numElems
-                numElems += 1
-            d -= 1
-
-            # Go Up
-            for i in range(d - 1, u - 1, -1):
-                matrix[i][l] = numElems
-                numElems += 1
+                matrix[b - 1][i] = counter
+                counter += 1
+            
+            b -= 1
+            if b == t:
+                break
+            
+            for i in range(b - 1, t - 1, - 1):
+                matrix[i][l] = counter
+                counter += 1
+            
             l += 1
-
+            if l == r:
+                break
+        
         return matrix
