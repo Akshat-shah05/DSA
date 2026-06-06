@@ -1,37 +1,36 @@
 class Solution:
     def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        ans = []
         ROWS, COLS = len(matrix), len(matrix[0])
-        totalElems = ROWS * COLS
-        l, r, u, d = 0, COLS, 0, ROWS
+        t, b, l, r = 0, ROWS, 0, COLS
 
-        spiral = []
-        numElems = 0
-        while numElems < totalElems:
-            # Go right
+        while True:
             for i in range(l, r):
-                spiral.append(matrix[u][i])
-                numElems += 1
-            u += 1
-
-            # Go Down
-            for i in range(u, d):
-                spiral.append(matrix[i][r - 1])
-                numElems += 1
-            r -= 1
+                ans.append(matrix[t][i])
             
-            if numElems >= totalElems:
+            t += 1
+            if t == b:
                 break
-
-            # Go Left
+            
+            for i in range(t, b):
+                ans.append(matrix[i][r - 1])
+            
+            r -= 1
+            if r == l:
+                break
+            
             for i in range(r - 1, l - 1, -1):
-                spiral.append(matrix[d - 1][i])
-                numElems += 1
-            d -= 1
-
-            # Go Up
-            for i in range(d - 1, u - 1, -1):
-                spiral.append(matrix[i][l])
-                numElems += 1
+                ans.append(matrix[b - 1][i])
+            
+            b -= 1
+            if b == t:
+                break
+            
+            for i in range(b - 1, t - 1, -1):
+                ans.append(matrix[i][l])
+            
             l += 1
-
-        return spiral
+            if l == r:
+                break
+            
+        return ans
