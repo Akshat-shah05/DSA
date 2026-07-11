@@ -1,19 +1,25 @@
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
-        directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
-        rows, cols = len(grid), len(grid[0])
-        
-        def dfs(r, c):
-            grid[r][c] = "#"
-            for dr, dc in directions:
-                newR, newC = r + dr, c + dc
-                if (0 <= newR < rows and 0 <= newC < cols and grid[newR][newC] == "1"):
-                    dfs(newR, newC)
-        
+        ROWS, COLS = len(grid), len(grid[0])
+        seen = set()
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
         islands = 0
-        for r in range(rows):
-            for c in range(cols):
-                if grid[r][c] == "1":
+
+        def dfs(r, c):
+            if r < 0 or c < 0 or r >= ROWS or c >= COLS or (r, c) in seen:
+                return
+            
+            if grid[r][c] == "0":
+                return 
+            
+            seen.add((r, c))
+
+            for dr, dc in directions:
+                dfs(r + dr, c + dc)
+
+        for r in range(ROWS):
+            for c in range(COLS):
+                if (r, c) not in seen and grid[r][c] == "1":
                     dfs(r, c)
                     islands += 1
         
