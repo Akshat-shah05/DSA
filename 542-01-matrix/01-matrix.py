@@ -18,17 +18,14 @@ class Solution:
 
         while q:
             r, c, dist = q.popleft()
-            grid[r][c] = dist
+            
 
             for dr, dc in directions:
                 new_r, new_c = r + dr, c + dc
                 if valid(new_r, new_c) and (new_r, new_c) not in seen:
                     seen.add((new_r, new_c))
-                    if grid[new_r][new_c] == 0:
-                        q.append((new_r, new_c, dist))
-                    
-                    else:
-                        q.append((new_r, new_c, dist + 1))
+                    q.append((new_r, new_c, dist + 1))
+                    grid[new_r][new_c] = dist + 1
         
         return grid
 
