@@ -1,52 +1,48 @@
 class Solution:
     def getNumberOfBacklogOrders(self, orders: List[List[int]]) -> int:
-        buyHeap = []
-        sellHeap = []
-
-        MOD = 10**9 + 7
-
-        for price, amount, orderType in orders:
-            if orderType == 0:
-                remaining = amount
-
-                while remaining > 0 and sellHeap and sellHeap[0][0] <= price:
-                    sell_price, sell_amount = sellHeap[0]
-                    minAmount = min(remaining, sell_amount)
-                    remaining -= minAmount
-                    sell_amount -= minAmount
-                    if sell_amount == 0:
-                        heapq.heappop(sellHeap)
+        buy_heap = [] # a max heap
+        sell_heap = [] # a min heap
+        for order in orders:
+            price, amount, o_type = order
+            # BUY Orders
+            if o_type == 0: 
+                while sell_heap and sell_heap[0][0] <= (price) and amount > 0:
+                    _, sell_amount = sell_heap[0]
+                    
+                    if amount > sell_amount:
+                        amount -= sell_amount
+                        heapq.heappop(sell_heap)
                     
                     else:
-                        sellHeap[0] = (sell_price, sell_amount)
-
-                if remaining >= 0:
-                    heapq.heappush(buyHeap, (-price, remaining))
-            
-            elif orderType == 1:
-                remaining = amount
-
-                while remaining > 0 and buyHeap and -buyHeap[0][0] >= price:
-                    buy_price, buy_amount = buyHeap[0]
-                    minAmount = min(remaining, buy_amount)
-                    remaining -= minAmount
-                    buy_amount -= minAmount
-                    if buy_amount == 0:
-                        heapq.heappop(buyHeap)
+                        remaining = sell_amount - amount
+                        amount = 0
+                        sell_heap[0][1] = remaining
+                
+                if amount > 0:
+                    heapq.heappush(buy_heap, [-price, amount])
                     
-                    else:
-                        buyHeap[0] = (buy_price, buy_amount)
-
-                if remaining > 0:
-                    heapq.heappush(sellHeap, (price, remaining))
-            
+            # SELL Orders
             else:
-                raise ValueError("invalid order type")
-    
-
+                while buy_heap and -1 * buy_heap[0][0] >= price and amount > 0:
+                    _, buy_amount = buy_heap[0]
+                    if amount > buy_amount:
+                        amount -= buy_amount
+                        heapq.heappop(buy_heap)
+                    
+                    else:
+                        remaining = buy_amount - amount
+                        amount = 0
+                        buy_heap[0][1] = remaining
+                
+                if amount > 0:
+                    heapq.heappush(sell_heap, [price, amount])
+        
         total = 0
-        for _, amt in buyHeap:
-            total = (total + amt) % MOD
-        for _, amt in sellHeap:
-            total = (total + amt) % MOD
-        return total
+        for p, a in buy_heap:
+            total += a
+        
+        for p, a in sell_heap:
+            total += a
+        
+        return total % (10**9 + 7)
+
