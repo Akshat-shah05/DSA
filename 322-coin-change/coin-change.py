@@ -1,22 +1,23 @@
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
-        q = deque([amount])
-        seen = set([amount])
-        steps = 0
+        if amount == 0:
+            return 0
+        
+        dp = [float('inf')] * (amount + 1)
+        dp[0] = 0
 
-        while q:
-            l = len(q)
-            for _ in range(l):
-                curAmount = q.popleft()
-                if curAmount == 0:
-                    return steps
-                
-                for coin in coins:
-                    newAmount = curAmount - coin
-                    if newAmount >= 0 and newAmount not in seen:
-                        seen.add(newAmount)
-                        q.append(newAmount)
+        for coin in coins:
+            if coin < amount:
+                dp[coin] = 1
 
-            steps += 1
+        for i in range(amount + 1):
+            min_val = float('inf')
+            for coin in coins:
+                prev = i - coin
+                if i - coin >= 0:
+                    min_val = min(min_val, dp[prev])
+            
+            dp[i] = min(dp[i], min_val + 1) 
+        
+        return dp[amount] if dp[amount] != float('inf') else -1
 
-        return -1
