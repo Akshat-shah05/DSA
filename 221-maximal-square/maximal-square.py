@@ -1,19 +1,22 @@
 class Solution:
     def maximalSquare(self, matrix: List[List[str]]) -> int:
-        # DP[i][j] will represent the maximum sidelength of a square whose bottom corner is (i, j)
-        # DP[i][j] = min(DP[i - 1][j], DP[i - 1][j - 1], DP[i][j - 1]) + 1
+        # let dp[i][j] represent sidelength of max square with bottom right corner (i, j)
+        # dp[i][j] += min(dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1])
+        ROWS, COLS = len(matrix), len(matrix[0])
+        dp = [[0] * (COLS + 1) for _ in range(ROWS + 1)]
 
-        rows, cols = len(matrix), len(matrix[0])
-        dp = [[0] * (cols + 1) for _ in range(rows + 1)]
+        max_side = 0
 
-        maxsqlen = 0
+        for r in range(1, ROWS + 1):
+            for c in range(1, COLS + 1):
+                if matrix[r - 1][c - 1] == "1":
+                    dp[r][c] = 1 + min(
+                        dp[r-1][c-1],
+                        dp[r][c-1],
+                        dp[r-1][c]
+                    )
+                
+                max_side = max(max_side, dp[r][c])
 
-        for i in range(1, rows + 1):
-            for j in range(1, cols + 1):
-                if matrix[i - 1][j - 1] == "1":
-                    dp[i][j] = min (
-                        dp[i - 1][j], dp[i - 1][j - 1], dp[i][j - 1]
-                    ) + 1
-                    maxsqlen = max(maxsqlen, dp[i][j])
-        
-        return maxsqlen**2
+        return max_side ** 2
+                
